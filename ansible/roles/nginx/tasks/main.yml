@@ -1,0 +1,37 @@
+- name: Run apt update
+  apt:
+    update_cache: yes
+
+- name: Install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: Copy index.html
+  copy:
+    src: files/index.nginx-debian.html
+    dest: /var/www/html/index.nginx-debian.html
+
+- name: Copy img to WebSrv01
+  copy:
+    src: files/img01.jpg
+    dest: /var/www/html/img01.jpg
+  when: inventory_hostname == "WebSrv1"
+
+- name: Copy img to WebSrv02
+  copy:
+    src: files/img02.jpg
+    dest: /var/www/html/img01.jpg
+  when: inventory_hostname == "WebSrv2"
+
+- name: Nginx systemd
+  service:
+    name: nginx
+    enabled: yes
+    state: started
+
+- name: Restart nginx
+  service:
+    name: nginx
+    state: restarted
+

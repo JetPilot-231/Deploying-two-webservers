@@ -1,0 +1,13 @@
+- name: Remove known hosts from local machine
+  hosts: localhost
+  connection: local
+  tasks:
+   - name: Execute ssh-keygen command on WebSrv1
+     command: ssh-keygen -f "/home/ubuntu/.ssh/known_hosts" -R "10.0.0.101"
+   - name: Execute ssh-keygen command on WebSrv2
+     command: ssh-keygen -f "/home/ubuntu/.ssh/known_hosts" -R "10.0.0.102"
+
+- hosts: WebSrv
+  become: true
+  roles:
+   - nginx
